@@ -3,9 +3,9 @@ package engine
 import (
 	"bytes"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"github.com/docker/docker/pkg/archive"
 	dockerclient "github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"io/ioutil"
 	"math/rand"

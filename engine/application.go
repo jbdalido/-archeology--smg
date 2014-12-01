@@ -2,7 +2,7 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
+	log "github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"gopkg.in/yaml.v1"
 	"math/rand"

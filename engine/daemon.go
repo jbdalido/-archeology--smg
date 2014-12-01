@@ -3,8 +3,8 @@ package engine
 import (
 	"encoding/json"
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	dockerclient "github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/logrus"
 	"os"
 	"path"
 	"time"

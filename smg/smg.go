@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	log "github.com/Sirupsen/logrus"
 	"github.com/codegangsta/cli"
+	log "github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/engine"
 	"github.com/jbdalido/smg/utils"
 	"os"
