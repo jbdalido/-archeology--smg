@@ -123,6 +123,10 @@ func main() {
 		},
 	}
 
+	// TODO : something is not right here !
+	if len(os.Args) == 1 {
+		os.Args = append(os.Args, "help")
+	}
 	cliApp.Run(os.Args)
 
 }
