@@ -1,0 +1,83 @@
+{
+	"ImportPath": "github.com/jbdalido/smg",
+	"GoVersion": "go1.3.3",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/Sirupsen/logrus",
+			"Comment": "v0.6.1-10-g6c28e16",
+			"Rev": "6c28e16200e55c2549705ac24ea58976c07f18ac"
+		},
+		{
+			"ImportPath": "github.com/codegangsta/cli",
+			"Comment": "1.2.0-38-g9908e96",
+			"Rev": "9908e96513e5a94de37004098a3974a567f18111"
+		},
+		{
+			"ImportPath": "github.com/coreos/go-etcd/etcd",
+			"Comment": "v0.2.0-rc1-127-g6fe04d5",
+			"Rev": "6fe04d580dfb71c9e34cbce2f4df9eefd1e1241e"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/archive",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/fileutils",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/ioutils",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/mflag",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/pools",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/promise",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/system",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/pkg/units",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar",
+			"Comment": "v1.3.0-792-g42522d2",
+			"Rev": "42522d29c7351d960e2346f1e19e0ac6f7ce7ad5"
+		},
+		{
+			"ImportPath": "github.com/fsouza/go-dockerclient",
+			"Comment": "0.2.1-321-g335b6a8",
+			"Rev": "335b6a888db6a8e33550c5faeab78017d420abcd"
+		},
+		{
+			"ImportPath": "github.com/jbdalido/logrus",
+			"Comment": "v0.5.1-38-gd925906",
+			"Rev": "d925906e5bf660b544bf94ffb19b1878ed2d76d8"
+		},
+		{
+			"ImportPath": "gopkg.in/yaml.v1",
+			"Rev": "9f9df34309c04878acc86042b16630b0f696e1de"
+		}
+	]
+}
