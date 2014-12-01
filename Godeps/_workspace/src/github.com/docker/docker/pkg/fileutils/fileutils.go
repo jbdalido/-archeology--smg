@@ -1,7 +1,7 @@
 package fileutils
 
 import (
-	log "github.com/Sirupsen/logrus"
+	log "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"path/filepath"
 )
 

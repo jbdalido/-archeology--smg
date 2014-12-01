@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	flag "github.com/docker/docker/pkg/mflag"
+	flag "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/mflag"
 )
 
 var (

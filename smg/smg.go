@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/codegangsta/cli"
-	log "github.com/jbdalido/logrus"
-	"github.com/jbdalido/smg/engine"
-	"github.com/jbdalido/smg/utils"
+	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/codegangsta/cli"
+	log "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/smg/engine"
+	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/smg/utils"
 	"os"
 	"os/signal"
 )
