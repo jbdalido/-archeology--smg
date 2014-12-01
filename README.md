@@ -1,22 +1,22 @@
 # Smuggler
-======================= 
+=======================
 
 Smuggler is a simple but powerful system designed to work with docker, to help you run, test, develop and build them, make them ready to use with any docker cluster environment, or just for you ! We're also setting up a pretty simple cluster management for small usages.
 
-Remember this is VERY **Alpha version**, and all commits are welcome to help us bring it at a new level. 
+Remember this is VERY **Alpha version**, and all commits are welcome to help us bring it at a new level.
 
 **Documentation is coming this week at https://smuggler.io, this app is alpha and is subject to a lot of changes in the coming weeks.**
 
-## Documentation is on the way 
+## Documentation is on the way
 
-Alpha testers, here's some yml example of what you can do with it : 
+Alpha testers, here's some yml example of what you can do with it :
 
     name: smuggler
     image: debian:jessie
     image_dockerfile: dockerfiles/deb.dockerfile
 
     # Open ports
-    ports: 
+    ports:
         - 8000:80
         - 3307:33
 
@@ -29,10 +29,10 @@ Alpha testers, here's some yml example of what you can do with it :
         - TEST=127.0.0.1
 
     # Use simple services
-    services: 
+    services:
         - mongo
         - redis
-    
+
     # Or complex applications
     # (applications are run instead of services if exists)
     applications:
@@ -58,7 +58,7 @@ Alpha testers, here's some yml example of what you can do with it :
     dockerfiles:
         default:
             dockerfile: dockerfiles/my.dockerfile
-            entrypoint: 
+            entrypoint:
                 - "/bin/echo"
             cmd:
                 - "test"
@@ -67,10 +67,10 @@ Alpha testers, here's some yml example of what you can do with it :
     # Build use the Dockerfile in the current directory
     # You'll soon be able to specify it too
 
-    # onlyif with search for this environment 
+    # onlyif with search for this environment
     # in commands
     # (soon in dockerfiles first and then commands)
-    
+
     # build works with regexp too
     build:
         master:
@@ -97,7 +97,7 @@ Tests are not implemented yet, criticals are expected to reach a good beta statu
 The build system is tight with git, each of  your image will be built with the following tags:
 
 - Commit (Git)
-- Branch (Git) 
+- Branch (Git)
 - Latest (Docker)
 - Tag (Git, if exists for the associated commit)
 
@@ -107,4 +107,4 @@ Jean-Baptiste Dalido <jbdalido@gmail.com>
 
 Nicolas Douillet <nicolas.douillet@gmail.com>
 
-
+Vincent Rischmann <vincent@rischmann.fr>
