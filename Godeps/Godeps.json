@@ -1,5 +1,5 @@
 {
-	"ImportPath": "github.com/vrischmann/smg",
+	"ImportPath": "github.com/jbdalido/smg",
 	"GoVersion": "go1.3.3",
 	"Packages": [
 		"./..."
@@ -74,14 +74,6 @@
 			"ImportPath": "github.com/jbdalido/logrus",
 			"Comment": "v0.5.1-38-gd925906",
 			"Rev": "d925906e5bf660b544bf94ffb19b1878ed2d76d8"
-		},
-		{
-			"ImportPath": "github.com/jbdalido/smg/engine",
-			"Rev": "42be0d6e882e71988168238af3cc7f92dcd05ae9"
-		},
-		{
-			"ImportPath": "github.com/jbdalido/smg/utils",
-			"Rev": "42be0d6e882e71988168238af3cc7f92dcd05ae9"
 		},
 		{
 			"ImportPath": "gopkg.in/yaml.v1",

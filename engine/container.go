@@ -2,9 +2,9 @@ package engine
 
 import (
 	"fmt"
-	dockerclient "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
-	log "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
-	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/smg/utils"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	"github.com/jbdalido/smg/utils"
 	"io"
 	"math/rand"
 	"runtime"

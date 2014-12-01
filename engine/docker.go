@@ -4,8 +4,8 @@ package engine
 
 import (
 	"fmt"
-	dockerclient "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
-	log "github.com/vrischmann/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"path/filepath"
 	"strings"
 )

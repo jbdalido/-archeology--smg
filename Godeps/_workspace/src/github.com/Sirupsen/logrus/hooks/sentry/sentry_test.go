@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"github.com/getsentry/raven-go"
 )
 

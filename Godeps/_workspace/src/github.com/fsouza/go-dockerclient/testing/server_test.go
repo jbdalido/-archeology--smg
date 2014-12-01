@@ -17,7 +17,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
 )
 
 func TestNewServer(t *testing.T) {

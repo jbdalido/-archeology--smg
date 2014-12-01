@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/vrischmann/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus/hooks/airbrake"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus/hooks/airbrake"
 	"github.com/tobi/airbrake-go"
 )
 
