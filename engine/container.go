@@ -164,7 +164,7 @@ func (c *Container) Delete(force bool) error {
 // If system limits are defined in the smuggler conf file
 // we're setting them to the container
 func (c *Container) SetSystemLimits(cpu int64, ram int64) error {
-	c.ContainerConfig.CpuShares = cpu
+	c.ContainerConfig.CPUShares = cpu
 	c.ContainerConfig.Memory = ram
 	return nil
 }
@@ -272,7 +272,7 @@ func (c *Container) SetPorts(ports []string) error {
 			}
 
 			bindPorts[c.ContainerPort(p)] = []dockerclient.PortBinding{{
-				HostIp:   "0.0.0.0",
+				HostIP:   "0.0.0.0",
 				HostPort: c.ParsePort(hostPort),
 			}}
 			log.Infof("Opening ports %s:%s", hostPort, p)
