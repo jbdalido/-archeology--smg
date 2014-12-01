@@ -1,3 +1,4 @@
+GOPATH := $(CURDIR)/vendor:$(GOPATH)
 default: linux-amd64
 
 cleanup:
