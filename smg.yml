@@ -1,0 +1,24 @@
+# Image Specifics
+image: debian:jessie
+
+# Application Name
+name: smuggler
+
+services:
+    - jbaptiste/cassandra-node
+    - mysql
+
+# Commands 
+commands:
+    default:
+        - ls /data
+        - echo "Done"
+        - ping -c 1 google.fr
+
+# Build section
+build:
+    default:
+        name: local/test
+        deploy: ["test"]
+        onlyif: default
+        push: false

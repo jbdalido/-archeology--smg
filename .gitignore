@@ -1,0 +1,6 @@
+bin/
+.DS_Store
+run.sh
+test.go
+test
+smgdctl.go
