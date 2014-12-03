@@ -1,22 +1,77 @@
 # Smuggler
-=======================
+======================= 
 
 Smuggler is a simple but powerful system designed to work with docker, to help you run, test, develop and build them, make them ready to use with any docker cluster environment, or just for you ! We're also setting up a pretty simple cluster management for small usages.
 
-Remember this is VERY **Alpha version**, and all commits are welcome to help us bring it at a new level.
+Remember this is VERY **Alpha version**, and all commits are welcome to help us bring it at a new level. 
 
 **Documentation is coming this week at https://smuggler.io, this app is alpha and is subject to a lot of changes in the coming weeks.**
 
-## Documentation is on the way
+## Install
+	
+Clone this repository
 
-Alpha testers, here's some yml example of what you can do with it :
+on osx : 
+
+	make osx
+
+on linux : 
+
+	make
+
+Binaries output in /bin
+
+
+## Command line 
+
+Run command :
+
+	$ - smg run --help
+	NAME:
+	   run - Run containers with the proper environment
+
+	USAGE:
+	   command run [command options] [arguments...]
+
+	OPTIONS:
+	   --start, -s 'smg.yml'				Specify a different file to use for your smg run (default: smg.yml)
+	   --no-cache, -n					Disable the use of docker cache during run and build with provided dockerfiles
+	   --verbose, -v					Verbose Mode
+	   --env, -e 'default'					Environment (commands or dockerfiles) to use for the run
+	   --override, -o '--override option --override option'	Environment (commands or dockerfiles) to use for the run
+	   --keepalive, -k					Keep containers alive after a run (successful or not)
+	   --shared-folder, -S					Use a shared-folder with the main container	
+
+Build command : 
+
+
+	bin/smg build --help
+	NAME:
+	   build - Build against the active git branch of the folder and the build setup of the smg file
+
+	USAGE:
+	   command build [command options] [arguments...]
+
+	OPTIONS:
+	   --start, -s 'smg.yml'		Specify a different file to use for your smg run (default: smg.yml)
+	   --no-cache, -n			Disable the use of docker cache during run and build with provided dockerfiles
+	   --verbose, -v			Verbose Mode
+	   --push, -p				Push images after a successful build
+	   --last, -l				Download last image for each build
+	   --delete, -D				Delete images created after a successful build
+	   --etcd '--etcd option --etcd option'	ETCD Storage http endpoint
+
+
+## Documentation is on the way 
+
+Alpha testers, here's some yml example of what you can do with it : 
 
     name: smuggler
     image: debian:jessie
     image_dockerfile: dockerfiles/deb.dockerfile
 
     # Open ports
-    ports:
+    ports: 
         - 8000:80
         - 3307:33
 
@@ -29,10 +84,10 @@ Alpha testers, here's some yml example of what you can do with it :
         - TEST=127.0.0.1
 
     # Use simple services
-    services:
+    services: 
         - mongo
         - redis
-
+    
     # Or complex applications
     # (applications are run instead of services if exists)
     applications:
@@ -58,7 +113,7 @@ Alpha testers, here's some yml example of what you can do with it :
     dockerfiles:
         default:
             dockerfile: dockerfiles/my.dockerfile
-            entrypoint:
+            entrypoint: 
                 - "/bin/echo"
             cmd:
                 - "test"
@@ -67,10 +122,10 @@ Alpha testers, here's some yml example of what you can do with it :
     # Build use the Dockerfile in the current directory
     # You'll soon be able to specify it too
 
-    # onlyif with search for this environment
+    # onlyif with search for this environment 
     # in commands
     # (soon in dockerfiles first and then commands)
-
+    
     # build works with regexp too
     build:
         master:
@@ -97,7 +152,7 @@ Tests are not implemented yet, criticals are expected to reach a good beta statu
 The build system is tight with git, each of  your image will be built with the following tags:
 
 - Commit (Git)
-- Branch (Git)
+- Branch (Git) 
 - Latest (Docker)
 - Tag (Git, if exists for the associated commit)
 
@@ -107,4 +162,4 @@ Jean-Baptiste Dalido <jbdalido@gmail.com>
 
 Nicolas Douillet <nicolas.douillet@gmail.com>
 
-Vincent Rischmann <vincent@rischmann.fr>
+
