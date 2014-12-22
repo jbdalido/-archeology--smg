@@ -329,8 +329,9 @@ func (b *Builder) MakeImage(dockerfile string, name ImageName, uptodate bool, no
 		for _, tag := range name.Tags {
 			// Tag Image
 			opts := dockerclient.TagImageOptions{
-				Tag:  tag,
-				Repo: name.Name,
+				Tag:   tag,
+				Repo:  name.Name,
+				Force: true,
 			}
 			if err := b.Client.TagImage(name.Name, opts); err != nil {
 				return err
