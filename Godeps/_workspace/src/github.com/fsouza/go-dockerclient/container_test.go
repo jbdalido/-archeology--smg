@@ -1,4 +1,4 @@
-// Copyright 2014 go-dockerclient authors. All rights reserved.
+// Copyright 2015 go-dockerclient authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
@@ -102,6 +102,14 @@ func TestListContainersParams(t *testing.T) {
 			ListContainersOptions{All: true, Limit: 10, Since: "adf9983", Before: "abdeef"},
 			map[string][]string{"all": {"1"}, "limit": {"10"}, "since": {"adf9983"}, "before": {"abdeef"}},
 		},
+		{
+			ListContainersOptions{Filters: map[string][]string{"status": {"paused", "running"}}},
+			map[string][]string{"filters": {"{\"status\":[\"paused\",\"running\"]}"}},
+		},
+		{
+			ListContainersOptions{All: true, Filters: map[string][]string{"exited": {"0"}, "status": {"exited"}}},
+			map[string][]string{"all": {"1"}, "filters": {"{\"exited\":[\"0\"],\"status\":[\"exited\"]}"}},
+		},
 	}
 	fakeRT := &FakeRoundTripper{message: "[]", status: http.StatusOK}
 	client := newTestClient(fakeRT)
@@ -176,6 +184,21 @@ func TestInspectContainer(t *testing.T) {
                      "StartedAt": "2013-05-07T14:51:42.087658+02:00",
                      "Ghost": false
              },
+             "Node": {
+                  "ID": "4I4E:QR4I:Z733:QEZK:5X44:Q4T7:W2DD:JRDY:KB2O:PODO:Z5SR:XRB6",
+                  "IP": "192.168.99.105",
+                  "Addra": "192.168.99.105:2376",
+                  "Name": "node-01",
+                  "Cpus": 4,
+                  "Memory": 1048436736,
+                  "Labels": {
+                      "executiondriver": "native-0.2",
+                      "kernelversion": "3.18.5-tinycore64",
+                      "operatingsystem": "Boot2Docker 1.5.0 (TCL 5.4); master : a66bce5 - Tue Feb 10 23:31:27 UTC 2015",
+                      "provider": "virtualbox",
+                      "storagedriver": "aufs"
+                  }
+              },
              "Image": "b750fe79269d2ec9a3c593ef05b4332b1d1a02a62b4accb2c21d589ff2f5f2dc",
              "NetworkSettings": {
                      "IpAddress": "",
@@ -502,6 +525,11 @@ func TestStartContainerNilHostConfig(t *testing.T) {
 	expectedContentType := "application/json"
 	if contentType := req.Header.Get("Content-Type"); contentType != expectedContentType {
 		t.Errorf("StartContainer(%q): Wrong content-type in request. Want %q. Got %q.", id, expectedContentType, contentType)
+	}
+	var buf [4]byte
+	req.Body.Read(buf[:])
+	if string(buf[:]) != "null" {
+		t.Errorf("Startcontainer(%q): Wrong body. Want null. Got %s", buf[:])
 	}
 }
 
@@ -1303,7 +1331,7 @@ func TestExportContainerViaUnixSocket(t *testing.T) {
 	tempSocket := tempfile("export_socket")
 	defer os.Remove(tempSocket)
 	endpoint := "unix://" + tempSocket
-	u, _ := parseEndpoint(endpoint)
+	u, _ := parseEndpoint(endpoint, false)
 	client := Client{
 		HTTPClient:             http.DefaultClient,
 		endpoint:               endpoint,

@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar"
+	"github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar"
 )
 
 var testUntarFns = map[string]func(string, io.Reader) error{
@@ -17,7 +17,8 @@ var testUntarFns = map[string]func(string, io.Reader) error{
 		return Untar(r, dest, nil)
 	},
 	"applylayer": func(dest string, r io.Reader) error {
-		return ApplyLayer(dest, ArchiveReader(r))
+		_, err := ApplyLayer(dest, ArchiveReader(r))
+		return err
 	},
 }
 

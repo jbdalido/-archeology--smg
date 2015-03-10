@@ -9,11 +9,12 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"strings"
 	"syscall"
 	"testing"
 	"time"
 
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar"
+	"github.com/docker/docker/vendor/src/code.google.com/p/go/src/pkg/archive/tar"
 )
 
 func TestCmdStreamLargeStderr(t *testing.T) {
@@ -164,8 +165,8 @@ func TestTarUntar(t *testing.T) {
 		Gzip,
 	} {
 		changes, err := tarUntar(t, origin, &TarOptions{
-			Compression: c,
-			Excludes:    []string{"3"},
+			Compression:     c,
+			ExcludePatterns: []string{"3"},
 		})
 
 		if err != nil {
@@ -195,8 +196,8 @@ func TestTarWithOptions(t *testing.T) {
 		opts       *TarOptions
 		numChanges int
 	}{
-		{&TarOptions{Includes: []string{"1"}}, 1},
-		{&TarOptions{Excludes: []string{"2"}}, 1},
+		{&TarOptions{IncludeFiles: []string{"1"}}, 1},
+		{&TarOptions{ExcludePatterns: []string{"2"}}, 1},
 	}
 	for _, testCase := range cases {
 		changes, err := tarUntar(t, origin, testCase.opts)
@@ -604,6 +605,21 @@ func TestUntarInvalidSymlink(t *testing.T) {
 	} {
 		if err := testBreakout("untar", "docker-TestUntarInvalidSymlink", headers); err != nil {
 			t.Fatalf("i=%d. %v", i, err)
+		}
+	}
+}
+
+func TestTempArchiveCloseMultipleTimes(t *testing.T) {
+	reader := ioutil.NopCloser(strings.NewReader("hello"))
+	tempArchive, err := NewTempArchive(reader, "")
+	buf := make([]byte, 10)
+	n, err := tempArchive.Read(buf)
+	if n != 5 {
+		t.Fatalf("Expected to read 5 bytes. Read %d instead", n)
+	}
+	for i := 0; i < 3; i++ {
+		if err = tempArchive.Close(); err != nil {
+			t.Fatalf("i=%d. Unexpected error closing temp archive: %v", i, err)
 		}
 	}
 }

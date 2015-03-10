@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/units"
+	"github.com/docker/docker/pkg/units"
 )
 
 var (

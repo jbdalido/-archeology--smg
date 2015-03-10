@@ -2,9 +2,9 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	log "github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
+	"gopkg.in/yaml.v1"
 	"math/rand"
 	"path/filepath"
 	"regexp"

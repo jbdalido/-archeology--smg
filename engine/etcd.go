@@ -2,8 +2,8 @@ package engine
 
 import (
 	"fmt"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/coreos/go-etcd/etcd"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	"github.com/coreos/go-etcd/etcd"
+	log "github.com/jbdalido/logrus"
 )
 
 type Etcd struct {

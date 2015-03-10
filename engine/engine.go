@@ -2,7 +2,7 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	log "github.com/jbdalido/logrus"
 )
 
 type Engine struct {

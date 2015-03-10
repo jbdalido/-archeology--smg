@@ -3,9 +3,9 @@ package engine
 import (
 	"bytes"
 	"fmt"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
-	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	"github.com/docker/docker/pkg/archive"
+	dockerclient "github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"io/ioutil"
 	"math/rand"
@@ -282,14 +282,14 @@ func (b *Builder) MakeImage(dockerfile string, name ImageName, uptodate bool, no
 	defer b.Cleanup()
 
 	if dockerfile != "Dockerfile" {
-		file, err := utils.OpenAndReadFile(b.Path + "/" + dockerfile)
+		_, err := utils.OpenAndReadFile(b.Path + "/" + dockerfile)
 		if err != nil {
 			return fmt.Errorf("%s does not exist", dockerfile)
 		}
-		err = b.WriteFile(b.Path+"/Dockerfile", file)
+		/*err = b.WriteFile(b.Path+"/Dockerfile", file)
 		if err != nil {
 			return err
-		}
+		}*/
 	}
 	// Tar the current path since
 	// the Dockerfile is here
@@ -314,6 +314,7 @@ func (b *Builder) MakeImage(dockerfile string, name ImageName, uptodate bool, no
 		Name:        name.Name,
 		InputStream: tarDir,
 		NoCache:     nocache,
+		Dockerfile:  dockerfile,
 	}
 
 	if utils.IsVerbose() {

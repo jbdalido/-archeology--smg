@@ -7,7 +7,7 @@ package mflag_test
 import (
 	"bytes"
 	"fmt"
-	. "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/mflag"
+	. "github.com/docker/docker/pkg/mflag"
 	"os"
 	"sort"
 	"strings"
@@ -149,17 +149,6 @@ func TestGet(t *testing.T) {
 		}
 	}
 	VisitAll(visitor)
-}
-
-func TestUsage(t *testing.T) {
-	called := false
-	ResetForTesting(func() { called = true })
-	if CommandLine.Parse([]string{"-x"}) == nil {
-		t.Error("parse did not fail for unknown flag")
-	}
-	if !called {
-		t.Error("did not call Usage for unknown flag")
-	}
 }
 
 func testParse(f *FlagSet, t *testing.T) {

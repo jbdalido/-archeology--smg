@@ -1,35 +1,28 @@
 package main
 
 import (
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus/hooks/airbrake"
-	"github.com/tobi/airbrake-go"
+	"codingit.appgratuites-network.com/ops/logrus"
+	"codingit.appgratuites-network.com/ops/logrus/hooks/noise"
 )
 
 var log = logrus.New()
 
 func init() {
 	log.Formatter = new(logrus.TextFormatter) // default
-	log.Hooks.Add(new(logrus_airbrake.AirbrakeHook))
+	opts := &logrus_noise.Options{
+		Slack: &logrus_noise.SlackOptions{
+			Channel:  "#alarming-insights",
+			Username: "testApp",
+		},
+	}
+	hook, err := logrus_noise.NewNoiseHook("http://127.0.0.1:6699/noise/alerts", "test_app", opts)
+	if err != nil {
+		log.Fatalf("%s", err)
+	}
+	log.Hooks.Add(hook)
 }
 
 func main() {
-	airbrake.Endpoint = "https://exceptions.whatever.com/notifier_api/v2/notices.xml"
-	airbrake.ApiKey = "whatever"
-	airbrake.Environment = "production"
-
-	log.WithFields(logrus.Fields{
-		"animal": "walrus",
-		"size":   10,
-	}).Info("A group of walrus emerges from the ocean")
-
-	log.WithFields(logrus.Fields{
-		"omg":    true,
-		"number": 122,
-	}).Warn("The group's number increased tremendously!")
-
-	log.WithFields(logrus.Fields{
-		"omg":    true,
-		"number": 100,
-	}).Fatal("The ice breaks!")
+	log.Warn("test if server down")
+	log.Fatalf("not down yet")
 }

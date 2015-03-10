@@ -3,7 +3,9 @@ package logrus
 import (
 	"bytes"
 	"fmt"
+	"regexp"
 	"sort"
+	"strings"
 	"time"
 )
 
@@ -13,19 +15,12 @@ const (
 	green   = 32
 	yellow  = 33
 	blue    = 34
-	grey    = 90
-
-	prefixDebug  = "-"
-	prefixInfo   = "-"
-	prefixWarn   = "x"
-	prefixErr    = "X"
-	prefixStream = "$"
 )
 
 var (
 	baseTimestamp time.Time
 	isTerminal    bool
-	prefix        string
+	noQuoteNeeded *regexp.Regexp
 )
 
 func init() {
@@ -41,6 +36,9 @@ type TextFormatter struct {
 	// Set to true to bypass checking for a TTY before outputting colors.
 	ForceColors   bool
 	DisableColors bool
+	// Set to true to disable timestamp logging (useful when the output
+	// is redirected to a logging system already adding a timestamp)
+	DisableTimestamp bool
 }
 
 func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
@@ -53,14 +51,16 @@ func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
 
 	b := &bytes.Buffer{}
 
-	//prefixFieldClashes(entry)
+	prefixFieldClashes(entry.Data)
 
 	isColored := (f.ForceColors || isTerminal) && !f.DisableColors
 
 	if isColored {
 		printColored(b, entry, keys)
 	} else {
-		f.appendKeyValue(b, "time", entry.Time.Format(time.RFC3339))
+		if !f.DisableTimestamp {
+			f.appendKeyValue(b, "time", entry.Time.Format(time.RFC3339))
+		}
 		f.appendKeyValue(b, "level", entry.Level.String())
 		f.appendKeyValue(b, "msg", entry.Message)
 		for _, key := range keys {
@@ -73,39 +73,52 @@ func (f *TextFormatter) Format(entry *Entry) ([]byte, error) {
 }
 
 func printColored(b *bytes.Buffer, entry *Entry, keys []string) {
-	var (
-		levelColor int
-		p          string
-	)
+	var levelColor int
 	switch entry.Level {
 	case WarnLevel:
 		levelColor = yellow
-		p = prefixWarn
-	case DebugLevel:
-		levelColor = grey
-		p = prefixDebug
 	case ErrorLevel, FatalLevel, PanicLevel:
 		levelColor = red
-		p = prefixErr
 	default:
 		levelColor = blue
-		p = prefixInfo
 	}
 
-	fmt.Fprintf(b, "\x1b[%dm[%s]\x1b[0m\t%-44s ", levelColor, p, entry.Message)
+	levelText := strings.ToUpper(entry.Level.String())[0:4]
 
+	fmt.Fprintf(b, "\x1b[%dm%s\x1b[0m[%04d] %-44s ", levelColor, levelText, miniTS(), entry.Message)
 	for _, k := range keys {
 		v := entry.Data[k]
 		fmt.Fprintf(b, " \x1b[%dm%s\x1b[0m=%v", levelColor, k, v)
 	}
 }
 
+func needsQuoting(text string) bool {
+	for _, ch := range text {
+		if !((ch >= 'a' && ch <= 'z') ||
+			(ch >= 'A' && ch <= 'Z') ||
+			(ch >= '0' && ch < '9') ||
+			ch == '-' || ch == '.') {
+			return false
+		}
+	}
+	return true
+}
+
 func (f *TextFormatter) appendKeyValue(b *bytes.Buffer, key, value interface{}) {
 	switch value.(type) {
-	case string, error:
-		fmt.Fprintf(b, "%v=%q ", key, value)
+	case string:
+		if needsQuoting(value.(string)) {
+			fmt.Fprintf(b, "%v=%s ", key, value)
+		} else {
+			fmt.Fprintf(b, "%v=%q ", key, value)
+		}
+	case error:
+		if needsQuoting(value.(error).Error()) {
+			fmt.Fprintf(b, "%v=%s ", key, value)
+		} else {
+			fmt.Fprintf(b, "%v=%q ", key, value)
+		}
 	default:
 		fmt.Fprintf(b, "%v=%v ", key, value)
 	}
 }
-
