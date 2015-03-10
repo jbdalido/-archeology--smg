@@ -21,8 +21,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/fsouza/go-dockerclient"
 	"github.com/gorilla/mux"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
 )
 
 // DockerServer represents a programmable, concurrent (not much), HTTP server

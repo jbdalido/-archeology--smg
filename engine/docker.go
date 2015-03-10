@@ -4,8 +4,8 @@ package engine
 
 import (
 	"fmt"
-	dockerclient "github.com/fsouza/go-dockerclient"
-	log "github.com/jbdalido/logrus"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"path/filepath"
 	"strings"
 )
@@ -90,7 +90,7 @@ func (d *Docker) Build(push bool, cleanup bool) (ImageName, error) {
 
 func (d *Docker) BuildDockerfile(name ImageName) error {
 	log.Infof("--> Building image %s", name.ToString())
-	err := d.Builder.MakeImage("Dockerfile", name, true, true)
+	err := d.Builder.MakeImage(name.Dockerfile, name, true, true)
 	if err != nil {
 		return err
 	}

@@ -12,5 +12,5 @@ linux-amd64: bin
 
 osx: bin
 	go build -o bin/smg smg/smg.go
-	go build -o bin/smgd smgd/smgd.go
+#	go build -o bin/smgd smgd/smgd.go
 

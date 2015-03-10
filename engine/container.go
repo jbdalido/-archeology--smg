@@ -2,8 +2,8 @@ package engine
 
 import (
 	"fmt"
-	dockerclient "github.com/fsouza/go-dockerclient"
-	log "github.com/jbdalido/logrus"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"io"
 	"math/rand"

@@ -20,5 +20,5 @@ build:
     default:
         name: local/test
         deploy: ["test"]
-        onlyif: default
+        dockerfile: dockerfile.build
         push: false

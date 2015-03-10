@@ -3,9 +3,9 @@ package engine
 import (
 	"bytes"
 	"fmt"
-	"github.com/docker/docker/pkg/archive"
-	dockerclient "github.com/fsouza/go-dockerclient"
-	log "github.com/jbdalido/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"io/ioutil"
 	"math/rand"
@@ -65,7 +65,7 @@ func NewBuilder(p string, client *dockerclient.Client) *Builder {
 
 	b := &Builder{
 		AppPath:  path,
-		Path:     tmpPath,
+		Path:     path,
 		Client:   client,
 		File:     &Dockerfile{},
 		Hostname: hostname,
@@ -281,16 +281,11 @@ func (b *Builder) MakeImage(dockerfile string, name ImageName, uptodate bool, no
 	// Prevent cleanup of directories
 	defer b.Cleanup()
 
-	if dockerfile != "Dockerfile" {
-		_, err := utils.OpenAndReadFile(b.Path + "/" + dockerfile)
-		if err != nil {
-			return fmt.Errorf("%s does not exist", dockerfile)
-		}
-		/*err = b.WriteFile(b.Path+"/Dockerfile", file)
-		if err != nil {
-			return err
-		}*/
+	_, err := utils.OpenAndReadFile(b.Path + "/" + dockerfile)
+	if err != nil {
+		return fmt.Errorf("%s does not exist", dockerfile)
 	}
+
 	// Tar the current path since
 	// the Dockerfile is here
 	tarDir, err := archive.Tar(b.Path, 0)

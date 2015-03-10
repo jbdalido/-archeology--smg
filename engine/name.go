@@ -7,10 +7,11 @@ import (
 )
 
 type ImageName struct {
-	Registry string
-	Branch   string
-	Name     string
-	Tags     []string
+	Registry   string
+	Branch     string
+	Name       string
+	Tags       []string
+	Dockerfile string
 }
 
 const (
@@ -94,7 +95,8 @@ func GetNameFromStr(name string) (ImageName, error) {
 
 func GetNameFromApp(app *Application, mode int) ImageName {
 	i := ImageName{
-		Name: app.Name,
+		Name:       app.Name,
+		Dockerfile: "Dockerfile",
 	}
 	// Binded Volumes
 	if !app.UseDockerfile {
@@ -114,6 +116,9 @@ func GetNameFromApp(app *Application, mode int) ImageName {
 			if len(n) == 2 {
 				i.Registry = n[0]
 			}
+		}
+		if app.ActiveBuild.Dockerfile != "" {
+			i.Dockerfile = app.ActiveBuild.Dockerfile
 		}
 	}
 	// Run mode

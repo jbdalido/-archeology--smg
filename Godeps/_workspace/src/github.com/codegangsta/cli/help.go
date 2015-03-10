@@ -1,6 +1,11 @@
 package cli
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+	"text/tabwriter"
+	"text/template"
+)
 
 // The text template for the Default help topic.
 // cli.go uses text/template to render templates. You can
@@ -89,9 +94,7 @@ var helpSubcommand = Command{
 }
 
 // Prints help for the App
-type helpPrinter func(templ string, data interface{})
-
-var HelpPrinter helpPrinter = nil
+var HelpPrinter = printHelp
 
 // Prints version for the App
 var VersionPrinter = printVersion
@@ -103,9 +106,9 @@ func ShowAppHelp(c *Context) {
 // Prints the list of subcommands as the default app completion method
 func DefaultAppComplete(c *Context) {
 	for _, command := range c.App.Commands {
-		fmt.Fprintln(c.App.Writer, command.Name)
+		fmt.Println(command.Name)
 		if command.ShortName != "" {
-			fmt.Fprintln(c.App.Writer, command.ShortName)
+			fmt.Println(command.ShortName)
 		}
 	}
 }
@@ -122,13 +125,13 @@ func ShowCommandHelp(c *Context, command string) {
 	if c.App.CommandNotFound != nil {
 		c.App.CommandNotFound(c, command)
 	} else {
-		fmt.Fprintf(c.App.Writer, "No help topic for '%v'\n", command)
+		fmt.Printf("No help topic for '%v'\n", command)
 	}
 }
 
 // Prints help for the given subcommand
 func ShowSubcommandHelp(c *Context) {
-	ShowCommandHelp(c, c.Command.Name)
+	HelpPrinter(SubcommandHelpTemplate, c.App)
 }
 
 // Prints the version number of the App
@@ -137,7 +140,7 @@ func ShowVersion(c *Context) {
 }
 
 func printVersion(c *Context) {
-	fmt.Fprintf(c.App.Writer, "%v version %v\n", c.App.Name, c.App.Version)
+	fmt.Printf("%v version %v\n", c.App.Name, c.App.Version)
 }
 
 // Prints the lists of commands within a given context
@@ -154,6 +157,16 @@ func ShowCommandCompletions(ctx *Context, command string) {
 	if c != nil && c.BashComplete != nil {
 		c.BashComplete(ctx)
 	}
+}
+
+func printHelp(templ string, data interface{}) {
+	w := tabwriter.NewWriter(os.Stdout, 0, 8, 1, '\t', 0)
+	t := template.Must(template.New("help").Parse(templ))
+	err := t.Execute(w, data)
+	if err != nil {
+		panic(err)
+	}
+	w.Flush()
 }
 
 func checkVersion(c *Context) bool {

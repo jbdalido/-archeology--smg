@@ -2,7 +2,7 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/logrus"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 )
 
 type Engine struct {
@@ -56,14 +56,15 @@ func (e *Engine) Build(push bool, cleanup bool, etcd []string) error {
 		return fmt.Errorf("No build definition matches this branch in your smuggler file")
 	}
 
-	if !e.App.HasDockerfile() {
+	/*if !e.App.HasDockerfile() {
 		return fmt.Errorf("Building system needs a Dockerfile, file not found at %s/Dockerfile", e.App.WorkingDir)
-	}
+	}*/
 	// Match the build definition
 	// If multiple regexp matched, we're taking the first
 	env, err := e.App.InitBuild()
 	if err != nil {
-		return err
+		log.Printf("%s", err)
+		return nil
 	}
 
 	if e.App.ActiveBuild.Onlyif != "" {

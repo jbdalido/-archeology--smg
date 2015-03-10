@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	flag "github.com/docker/docker/pkg/mflag"
+	flag "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/mflag"
 	"github.com/jbdalido/smg/engine"
 	"log"
 )

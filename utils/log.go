@@ -3,7 +3,7 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	log "github.com/jbdalido/logrus"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"io"
 	//"strings"
 )

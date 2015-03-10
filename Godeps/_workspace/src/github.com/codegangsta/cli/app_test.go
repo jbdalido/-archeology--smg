@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/codegangsta/cli"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/codegangsta/cli"
 )
 
 func ExampleApp() {
@@ -262,50 +262,6 @@ func TestApp_ParseSliceFlags(t *testing.T) {
 
 	if !StrsEquals(parsedStringSlice, expectedStringSlice) {
 		t.Errorf("%v does not match %v", parsedStringSlice, expectedStringSlice)
-	}
-}
-
-func TestApp_DefaultStdout(t *testing.T) {
-	app := cli.NewApp()
-
-	if app.Writer != os.Stdout {
-		t.Error("Default output writer not set.")
-	}
-}
-
-type mockWriter struct {
-	written []byte
-}
-
-func (fw *mockWriter) Write(p []byte) (n int, err error) {
-	if fw.written == nil {
-		fw.written = p
-	} else {
-		fw.written = append(fw.written, p...)
-	}
-
-	return len(p), nil
-}
-
-func (fw *mockWriter) GetWritten() (b []byte) {
-	return fw.written
-}
-
-func TestApp_SetStdout(t *testing.T) {
-	w := &mockWriter{}
-
-	app := cli.NewApp()
-	app.Name = "test"
-	app.Writer = w
-
-	err := app.Run([]string{"help"})
-
-	if err != nil {
-		t.Fatalf("Run error: %s", err)
-	}
-
-	if len(w.written) == 0 {
-		t.Error("App did not write output to desired writer.")
 	}
 }
 

@@ -13,8 +13,8 @@ import (
 	"os"
 	"path"
 
-	"github.com/Sirupsen/logrus"
-	"github.com/docker/docker/pkg/archive"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
 )
 
 var (

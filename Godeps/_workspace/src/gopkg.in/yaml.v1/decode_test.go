@@ -1,8 +1,8 @@
 package yaml_test
 
 import (
+	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
 	. "gopkg.in/check.v1"
-	"gopkg.in/yaml.v1"
 	"math"
 	"reflect"
 	"strings"

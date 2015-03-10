@@ -16,7 +16,7 @@ import (
 	"io"
 	"sync"
 
-	"github.com/docker/docker/pkg/ioutils"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/ioutils"
 )
 
 var (

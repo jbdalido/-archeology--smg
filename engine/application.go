@@ -2,9 +2,9 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/logrus"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
 	"github.com/jbdalido/smg/utils"
-	"gopkg.in/yaml.v1"
 	"math/rand"
 	"path/filepath"
 	"regexp"
@@ -45,10 +45,11 @@ type Application struct {
 }
 
 type Build struct {
-	Push   bool     `yaml:"push"`
-	Deploy []string `yaml:"deploy"`
-	Name   string   `yaml:"name"`
-	Onlyif string   `yaml:"onlyif"`
+	Push       bool     `yaml:"push"`
+	Deploy     []string `yaml:"deploy"`
+	Name       string   `yaml:"name"`
+	Dockerfile string   `yaml:"dockerfile"`
+	Onlyif     string   `yaml:"onlyif"`
 }
 
 type SystemConfig struct {
@@ -110,7 +111,7 @@ func (a *Application) InitBuild() (string, error) {
 		return "default", nil
 	}
 
-	return "", fmt.Errorf("No build setup is matching your branch in your config file")
+	return "", fmt.Errorf("Your smuggler definition file doesnt include build action for this branch")
 }
 
 func (a *Application) BuildApplications() {
