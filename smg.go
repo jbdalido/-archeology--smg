@@ -22,7 +22,7 @@ func main() {
 	cliApp := cli.App{
 		Name:    "smg",
 		Usage:   "Run and Build docker - https://smuggler.io",
-		Version: "0.4.1",
+		Version: "0.5",
 	}
 
 	cliApp.Flags = []cli.Flag{
