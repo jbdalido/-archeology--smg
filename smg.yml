@@ -19,6 +19,5 @@ commands:
 build:
     default:
         name: local/test
-        deploy: ["test"]
-        dockerfile: dockerfile.build
+        dockerfile: examples/multiple-dockerfiles/dockerfile.build
         push: false
