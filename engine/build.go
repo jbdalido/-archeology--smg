@@ -65,7 +65,7 @@ func NewBuilder(p string, client *dockerclient.Client) *Builder {
 
 	b := &Builder{
 		AppPath:  path,
-		Path:     path,
+		Path:     tmpPath,
 		Client:   client,
 		File:     &Dockerfile{},
 		Hostname: hostname,
