@@ -79,7 +79,9 @@ func (a *Application) Init() error {
 	}
 
 	a.Git, err = utils.NewGit(a.WorkingDir)
-
+	if err != nil {
+		log.Fatalf("err git %s", err)
+	}
 	return nil
 }
 

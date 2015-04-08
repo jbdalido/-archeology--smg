@@ -138,8 +138,8 @@ func GetNameFromApp(app *Application, mode int) ImageName {
 			i.Tags = append(i.Tags, app.Git.LastCommit.Short)
 		}
 
-		if app.Git.Tag != "" {
-			i.Tags = append(i.Tags, app.Git.Tag)
+		if len(app.Git.Tag) > 0 {
+			i.Tags = append(i.Tags, app.Git.Tag...)
 		}
 	}
 	// Since we're not using latest we need to set it each time,

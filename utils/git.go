@@ -14,7 +14,7 @@ type Git struct {
 	LastCommit *Commit
 	Repository string
 	Branch     string
-	Tag        string
+	Tag        []string
 }
 
 type Commit struct {
@@ -30,21 +30,27 @@ func NewGit(p string) (*Git, error) {
 	}
 
 	head := path.Clean(p) + "/.git/HEAD"
-	s, err := OpenFileAndRegexp(head, "^ref: refs/heads/([^ ]+).*$")
+	s, err := OpenFileAndRegexp(head, "^(ref: refs/heads/([^ ]+).*)|(.*)$")
 	if err != nil {
 		return nil, err
 	}
-	if len(s) == 2 {
-		g.Branch = s[1]
+
+	if len(s) == 4 {
+		g.Branch = s[2]
 	}
 
-	commit := path.Clean(p) + "/.git/refs/heads/" + g.Branch
-	s, err = OpenFileAndRegexp(commit, "(.*)")
-	if err != nil {
-		return g, nil
+	if g.Branch != "" {
+		commit := path.Clean(p) + "/.git/refs/heads/" + g.Branch
+		t, err := OpenFileAndRegexp(commit, "(.*)")
+		if err != nil {
+			return g, nil
+		}
+		g.LastCommit.ID = t[0]
+		g.LastCommit.Short = t[0][:9]
+	} else {
+		g.LastCommit.ID = s[0]
+		g.LastCommit.Short = s[0][:9]
 	}
-	g.LastCommit.ID = s[0]
-	g.LastCommit.Short = s[0][:9]
 
 	tags, err := ioutil.ReadDir(path.Clean(p) + "/.git/refs/tags/")
 	if err != nil {
@@ -54,7 +60,7 @@ func NewGit(p string) (*Git, error) {
 		for _, tag := range tags {
 			b, _ := OpenAndReadFile(path.Clean(p) + "/.git/refs/tags/" + tag.Name())
 			if string(b)[:9] == g.LastCommit.Short {
-				g.Tag = tag.Name()
+				g.Tag = append(g.Tag, tag.Name())
 			}
 		}
 	}
