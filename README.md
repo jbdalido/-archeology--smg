@@ -5,7 +5,6 @@ Smuggler is a simple but powerful system designed to work with docker, to help y
 
 Remember this is VERY **Alpha version**, and all commits are welcome to help us bring it at a new level. 
 
-**Documentation is coming this week at https://smuggler.io, this app is alpha and is subject to a lot of changes in the coming weeks.**
 
 ## Install
 
