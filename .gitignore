@@ -1,6 +1,7 @@
 bin/
 .DS_Store
 run.sh
+smg
 test.go
 test
 smgdctl.go
