@@ -8,19 +8,8 @@ Remember this is VERY **Alpha version**, and all commits are welcome to help us 
 **Documentation is coming this week at https://smuggler.io, this app is alpha and is subject to a lot of changes in the coming weeks.**
 
 ## Install
-	
-Clone this repository
 
-on osx : 
-
-	make osx
-
-on linux : 
-
-	make
-
-Binaries output in /bin
-
+	 go get github.com/jbdalido/smg
 
 ## Command line 
 
