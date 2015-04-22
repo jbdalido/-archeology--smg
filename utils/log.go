@@ -3,9 +3,8 @@ package utils
 import (
 	"bytes"
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"io"
-	//"strings"
 )
 
 var Verbose bool
@@ -13,7 +12,7 @@ var StdPre *StdPrefixed
 
 func InitLogger(v bool) {
 	StdPre = &StdPrefixed{
-		Prefix: "[$]",
+		Prefix: "CONT[$]",
 		buf:    bytes.NewBuffer([]byte("")),
 	}
 	if v {

@@ -2,15 +2,14 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 )
 
 type Engine struct {
-	Docker     *Docker
-	ClusterID  string
-	Config     *Config
-	App        *Application
-	EtcdClient *Etcd
+	Docker    *Docker
+	ClusterID string
+	Config    *Config
+	App       *Application
 }
 
 func New(c *Config) (*Engine, error) {
@@ -50,7 +49,7 @@ func (e *Engine) Init(app *Application) error {
 	return nil
 }
 
-func (e *Engine) Build(push bool, cleanup bool, etcd []string) error {
+func (e *Engine) Build(push bool, cleanup bool) error {
 
 	if len(e.App.Builds) == 0 {
 		return fmt.Errorf("No build definition matches this branch in your smuggler file")
@@ -94,47 +93,12 @@ func (e *Engine) Build(push bool, cleanup bool, etcd []string) error {
 	}
 
 	// Build and push
-	imageName, err := e.Docker.Build(push, cleanup)
+	_, err = e.Docker.Build(push, cleanup)
 	if err != nil {
 		return err
 	}
-	if len(etcd) > 0 && push {
-
-		e.EtcdClient = NewEtcd(etcd)
-
-		subs := e.App.GetSubscriptions()
-		if len(subs) > 0 {
-			// Get all images name to pull request
-			names := imageName.GetAllNames()
-
-			if len(names) > 0 {
-				for _, name := range names {
-					err := e.PullRequest(name, subs)
-					if err != nil {
-						log.Errorf("%s", err)
-					}
-				}
-			}
-		}
-	}
 
 	return nil
-}
-
-func (e *Engine) PullRequest(name string, chans []string) error {
-	if len(chans) < 1 {
-		return fmt.Errorf("No channel to send subscribe to")
-	}
-
-	for _, c := range chans {
-		log.Infof("Pull Request on channel %s for %s ,%s", c, name, e.ClusterID+"/subscriptions/"+c)
-		err := e.EtcdClient.AppendKeyDirectory("/"+e.ClusterID+"/subscriptions/"+c, name)
-		if err != nil {
-			return fmt.Errorf("%s", err)
-		}
-	}
-	return nil
-
 }
 
 func (e *Engine) Run(env string) error {

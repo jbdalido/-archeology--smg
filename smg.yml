@@ -6,7 +6,6 @@ name: smuggler
 
 services:
     - jbaptiste/cassandra-node
-    - mysql
 
 # Commands 
 commands:

@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/codegangsta/cli"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/engine"
 	"github.com/jbdalido/smg/utils"
 	"os"
@@ -23,6 +23,7 @@ func main() {
 		Name:    "smg",
 		Usage:   "Run and Build docker - https://smuggler.io",
 		Version: "0.5.1",
+		Action:  cli.ShowAppHelp,
 	}
 
 	cliApp.Flags = []cli.Flag{
@@ -65,11 +66,6 @@ func main() {
 			Name:  "delete, D",
 			Usage: "Delete images created after a successful build",
 		},
-		cli.StringSliceFlag{
-			Name:  "etcd",
-			Value: &cli.StringSlice{},
-			Usage: "ETCD Storage http endpoint",
-		},
 	}
 
 	runFlags := []cli.Flag{
@@ -94,7 +90,7 @@ func main() {
 		cli.StringSliceFlag{
 			Name:  "override, o",
 			Value: &cli.StringSlice{},
-			Usage: "Environment (commands or dockerfiles) to use for the run",
+			Usage: "override can replace a declared service by a running container",
 		},
 		cli.BoolFlag{
 			Name:  "keepalive, k",
@@ -102,7 +98,7 @@ func main() {
 		},
 		cli.BoolFlag{
 			Name:  "shared-folder, S",
-			Usage: "Use a shared-folder with the main container",
+			Usage: "Use a shared-folder with the main container instead of copying the context under /data",
 		},
 	}
 
@@ -123,12 +119,10 @@ func main() {
 		},
 	}
 
-	// TODO : something is not right here !
-	if len(os.Args) == 1 {
-		os.Args = append(os.Args, "help")
+	err := cliApp.Run(os.Args)
+	if err != nil {
+		log.Fatalf("oups")
 	}
-	cliApp.Run(os.Args)
-
 }
 
 func Init(c *cli.Context) error {
@@ -180,7 +174,7 @@ func CmdBuild(c *cli.Context) {
 		log.Fatalf("%s", err)
 	}
 	go func() {
-		endChannel <- eng.Build(c.Bool("push"), c.Bool("delete"), c.StringSlice("etcd"))
+		endChannel <- eng.Build(c.Bool("push"), c.Bool("delete"))
 	}()
 	select {
 	case err := <-endChannel:

@@ -7,6 +7,7 @@ package docker
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"io/ioutil"
 	"net"
 	"net/http"
@@ -154,6 +155,7 @@ func TestListContainersFailure(t *testing.T) {
 func TestInspectContainer(t *testing.T) {
 	jsonContainer := `{
              "Id": "4fa6e0f0c6786287e131c3852c58a2e01cc697a68231826813597e4994f1d6e2",
+             "AppArmorProfile": "Profile",
              "Created": "2013-05-07T14:51:42.087658+02:00",
              "Path": "date",
              "Args": [],
@@ -175,7 +177,10 @@ func TestInspectContainer(t *testing.T) {
                      ],
                      "Image": "base",
                      "Volumes": {},
-                     "VolumesFrom": ""
+                     "VolumesFrom": "",
+                     "SecurityOpt": [
+                         "label:user:USER"
+                      ]
              },
              "State": {
                      "Running": false,
@@ -536,7 +541,7 @@ func TestStartContainerNilHostConfig(t *testing.T) {
 func TestStartContainerNotFound(t *testing.T) {
 	client := newTestClient(&FakeRoundTripper{message: "no such container", status: http.StatusNotFound})
 	err := client.StartContainer("a2344", &HostConfig{})
-	expected := &NoSuchContainer{ID: "a2344"}
+	expected := &NoSuchContainer{ID: "a2344", Err: err.(*NoSuchContainer).Err}
 	if !reflect.DeepEqual(err, expected) {
 		t.Errorf("StartContainer: Wrong error returned. Want %#v. Got %#v.", expected, err)
 	}
@@ -1307,6 +1312,14 @@ func TestNoSuchContainerError(t *testing.T) {
 	}
 }
 
+func TestNoSuchContainerErrorMessage(t *testing.T) {
+	var err = &NoSuchContainer{ID: "i345", Err: errors.New("some advanced error info")}
+	expected := "some advanced error info"
+	if got := err.Error(); got != expected {
+		t.Errorf("NoSuchContainer: wrong message. Want %q. Got %q.", expected, got)
+	}
+}
+
 func TestExportContainer(t *testing.T) {
 	content := "exported container tar content"
 	out := stdoutMock{bytes.NewBufferString(content)}
@@ -1540,5 +1553,28 @@ func TestTopContainerWithPsArgs(t *testing.T) {
 	expectedURI := "/containers/abef348/top?ps_args=aux"
 	if !strings.HasSuffix(fakeRT.requests[0].URL.String(), expectedURI) {
 		t.Errorf("TopContainer: Expected URI to have %q. Got %q.", expectedURI, fakeRT.requests[0].URL.String())
+	}
+}
+
+func TestRenameContainer(t *testing.T) {
+	fakeRT := &FakeRoundTripper{message: "", status: http.StatusOK}
+	client := newTestClient(fakeRT)
+	opts := RenameContainerOptions{ID: "something_old", Name: "something_new"}
+	err := client.RenameContainer(opts)
+	if err != nil {
+		t.Fatal(err)
+	}
+	req := fakeRT.requests[0]
+	if req.Method != "POST" {
+		t.Errorf("RenameContainer: wrong HTTP method. Want %q. Got %q.", "POST", req.Method)
+	}
+	expectedURL, _ := url.Parse(client.getURL("/containers/something_old/rename?name=something_new"))
+	if gotPath := req.URL.Path; gotPath != expectedURL.Path {
+		t.Errorf("RenameContainer: Wrong path in request. Want %q. Got %q.", expectedURL.Path, gotPath)
+	}
+	expectedValues := expectedURL.Query()["name"]
+	actualValues := req.URL.Query()["name"]
+	if len(actualValues) != 1 || expectedValues[0] != actualValues[0] {
+		t.Errorf("RenameContainer: Wrong params in request. Want %q. Got %q.", expectedValues, actualValues)
 	}
 }

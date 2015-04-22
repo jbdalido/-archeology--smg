@@ -2,8 +2,8 @@ package engine
 
 import (
 	"fmt"
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/jbdalido/logrus"
 	"github.com/jbdalido/smg/utils"
 	"io"
 	"math/rand"
@@ -88,7 +88,6 @@ func (c *Container) Start(out bool) (int, error) {
 		}
 
 		if out {
-
 			c.Logs(c.Docker.ID, utils.StdPre, utils.StdPre)
 			c.Code, err = c.Client.WaitContainer(c.Docker.ID)
 			if err != nil {
