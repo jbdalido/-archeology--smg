@@ -24,6 +24,7 @@ func main() {
 		Usage:   "Run and Build docker - https://smuggler.io",
 		Version: "0.5.1",
 		Action:  cli.ShowAppHelp,
+		Writer:  os.Stdout,
 	}
 
 	cliApp.Flags = []cli.Flag{
