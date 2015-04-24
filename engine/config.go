@@ -6,7 +6,6 @@ import (
 	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
 	"github.com/jbdalido/smg/utils"
 	"os"
-	"os/user"
 	"path"
 	"strings"
 )
@@ -23,15 +22,15 @@ type Repository struct {
 
 func NewConfig(filePath string, h string) (*Config, error) {
 	c := new(Config)
-	dockerCfgPath := "~/"
-	usr, err := user.Current()
-	if err != nil {
-		log.Fatal(err)
-	}
+
 	if strings.Contains(filePath, "~") {
-		filePath = strings.Replace(filePath, "~", usr.HomeDir, 1)
+		home := os.Getenv("HOME")
+		if home == "" {
+			log.Fatalf("Can't find home env variable")
+		}
+		filePath = strings.Replace(filePath, "~", home, 1)
 	}
-	dockerCfgPath = strings.Replace(dockerCfgPath, "~", usr.HomeDir, 1)
+
 	datas, err := utils.OpenAndReadFile(filePath)
 	if err != nil {
 		c := &Config{
@@ -52,26 +51,33 @@ func NewConfig(filePath string, h string) (*Config, error) {
 
 				// Check if they exists
 				if hostTLS != "" && hostCertPath != "" {
+
 					log.Debugf("Docker Cert Path at %s", hostCertPath)
 					log.Debugf("Docker SSL Mode %s", hostTLS)
+
 					if hostTLS == "1" {
+
 						// Setup path for key and certificates
 						key := path.Clean(hostCertPath) + "/key.pem"
 						cert := path.Clean(hostCertPath) + "/cert.pem"
 						ca := path.Clean(hostCertPath) + "/ca.pem"
+
 						// Test the files
 						_, err := utils.OpenFile(key)
 						if err != nil {
 							return nil, fmt.Errorf("Can't read your boot2docker key: %s", key)
 						}
+
 						_, err = utils.OpenFile(cert)
 						if err != nil {
 							return nil, fmt.Errorf("Can't read your boot2docker cert: %s", cert)
 						}
+
 						_, err = utils.OpenFile(ca)
 						if err != nil {
 							return nil, fmt.Errorf("Can't read your boot2docker Ca cert: %s", ca)
 						}
+
 						c.Docker.Cert = cert
 						c.Docker.CA = ca
 						c.Docker.Key = key
