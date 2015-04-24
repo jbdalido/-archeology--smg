@@ -146,8 +146,8 @@ The build system is tight with git, each of  your image will be built with the f
 
 ## Authors
 
-Jean-Baptiste Dalido <jbdalido@gmail.com>
-
-Nicolas Douillet <nicolas.douillet@gmail.com>
+Jean-Baptiste Dalido https://github.com/jbdalido
+Vincent Rischmann https://github.com/vrischmann
+Nicolas Douillet https://github.com/minimarcel
 
 
