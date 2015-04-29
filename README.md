@@ -110,15 +110,13 @@ Alpha testers, here's some yml example of what you can do with it :
     # Build use the Dockerfile in the current directory
     # You'll soon be able to specify it too
 
-    # onlyif with search for this environment 
-    # in commands
-    # (soon in dockerfiles first and then commands)
-    
     # build works with regexp too
     build:
         master:
             name: local/smuggler
-            onlyif: testing
+            # onlyif will run this command and abort if it fails. Here we’re ensuring that tests
+            # pass before pushing.
+            onlyif: test
             push: true
         dev:
             name: smuggler
