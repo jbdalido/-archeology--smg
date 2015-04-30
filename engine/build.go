@@ -3,16 +3,17 @@ package engine
 import (
 	"bytes"
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
-	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
-	"github.com/jbdalido/smg/utils"
 	"io/ioutil"
 	"math/rand"
 	"os"
 	"path"
 	"strconv"
 	"strings"
+
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	"github.com/jbdalido/smg/utils"
 )
 
 //
@@ -113,50 +114,52 @@ func NewSimpleBuilder(client *dockerclient.Client) *Builder {
 //	-	Add a method to validate it's looks like a dockerfile ?
 
 func (b *Builder) InitDockerfile(filename string) error {
+	var commands bytes.Buffer
 
 	if b.File.From == "" {
 		return fmt.Errorf("No from image")
 	}
 
-	commands := fmt.Sprintf("FROM %s\nMaintainer Han Solo <solo@smuggler.io>\n\n", b.File.From)
+	commands.WriteString(fmt.Sprintf("FROM %s\nMaintainer Han Solo <solo@smuggler.io>\n\n",
+		b.File.From))
 
 	for _, env := range b.File.Env {
-		commands += fmt.Sprintf("ENV %s\n", env)
+		commands.WriteString(fmt.Sprintf("ENV %s\n", env))
 	}
 
 	for _, port := range b.File.Ports {
-		commands += fmt.Sprintf("EXPOSE %s\n", port)
+		commands.WriteString(fmt.Sprintf("EXPOSE %s\n", port))
 	}
 
 	for _, add := range b.File.Add {
-		commands += fmt.Sprintf("ADD %s\n", add)
+		commands.WriteString(fmt.Sprintf("ADD %s\n", add))
 	}
 
 	for _, cp := range b.File.Copy {
-		commands += fmt.Sprintf("COPY %s\n", cp)
+		commands.WriteString(fmt.Sprintf("COPY %s\n", cp))
 	}
 
 	if b.File.Workdir != "" {
-		commands += fmt.Sprintf("WORKDIR %s\n", b.File.Workdir)
+		commands.WriteString(fmt.Sprintf("WORKDIR %s\n", b.File.Workdir))
 	}
 
 	for _, run := range b.File.Run {
-		commands += fmt.Sprintf("RUN %s\n", run)
+		commands.WriteString(fmt.Sprintf("RUN %s\n", run))
 	}
 
 	if b.File.Entrypoint != "" {
-		commands += fmt.Sprintf("ENTRYPOINT [\"%s\"]\n", b.File.Entrypoint)
+		commands.WriteString(fmt.Sprintf("ENTRYPOINT [\"%s\"]\n", b.File.Entrypoint))
 	}
 
 	if len(b.File.Cmd) > 0 {
-		commands += "CMD [ "
+		commands.WriteString("CMD [ ")
 		for _, cmd := range b.File.Cmd {
-			commands += fmt.Sprintf("\"%s\" ", cmd)
+			commands.WriteString(fmt.Sprintf("\"%s\" ", cmd))
 		}
-		commands += "]\n"
+		commands.WriteString("]\n")
 	}
 
-	err := b.WriteFile(b.Path+"/"+filename, []byte(commands))
+	err := b.WriteFile(fmt.Sprintf("%s/%s", b.Path, filename), commands.Bytes())
 	if err != nil {
 		return err
 	}
