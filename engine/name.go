@@ -47,8 +47,6 @@ func (i *ImageName) ToHostname() (string, error) {
 	sp := strings.Split(tmp, "/")
 	if len(sp) == 2 {
 		tmp = sp[1]
-	} else {
-		tmp = tmp
 	}
 
 	// Now let's check branch
