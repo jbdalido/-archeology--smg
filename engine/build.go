@@ -193,10 +193,13 @@ func (b *Builder) WriteRunScript(name string, lines []string, sharedDirectory bo
 	// Write a run.sh script
 	if len(lines) > 0 {
 		// Setup run script line with friendly docker script
-		commands := "#!/bin/bash\n"
-		for _, c := range lines {
-			commands = fmt.Sprintf("%s%s\nif [ $? -ne 0 ] ; then exit 1 ; fi\n", commands, c)
-			b.File.Cmd = append(b.File.Cmd)
+		var commands bytes.Buffer
+
+		commands.WriteString("#!/bin/bash\n")
+		// Exit immediately if a command exits with a non-zero status.
+		commands.WriteString("set -e\n")
+		for _, line := range lines {
+			commands.WriteString(fmt.Sprintf("%s\n", line))
 		}
 
 		// Setup the right path to write the run script
@@ -206,7 +209,7 @@ func (b *Builder) WriteRunScript(name string, lines []string, sharedDirectory bo
 		}
 
 		// Write the run script
-		err := b.WriteFile(fmt.Sprintf("%s/%s", p, name), []byte(commands))
+		err := b.WriteFile(fmt.Sprintf("%s/%s", p, name), commands.Bytes())
 		if err != nil {
 			return err
 		}
