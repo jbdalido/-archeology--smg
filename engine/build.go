@@ -77,7 +77,7 @@ func NewBuilder(p string, client *dockerclient.Client) *Builder {
 	// - Adapt to dynamic file location ?
 	err = b.LoadAuthConfig("~/")
 	if err != nil {
-		log.Infof(" Unreadable config file at ~/.dockercfg")
+		log.Infof("Unreadable config file at ~/.dockercfg, caused by : %s", err)
 	}
 
 	return b
@@ -101,7 +101,7 @@ func NewSimpleBuilder(client *dockerclient.Client) *Builder {
 	// - Adapt to dynamic file location
 	err = b.LoadAuthConfig("~/")
 	if err != nil {
-		log.Debugf("Unreadable config file at ~/.dockercfg")
+		log.Debugf("Unreadable config file at ~/.dockercfg, caused by : %s", err)
 	}
 
 	return b
