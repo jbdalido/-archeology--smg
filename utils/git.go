@@ -7,6 +7,8 @@ import (
 	"os"
 	"path"
 	"regexp"
+
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 )
 
 type Git struct {
@@ -59,6 +61,10 @@ func NewGit(p string) (*Git, error) {
 	if len(tags) > 0 {
 		for _, tag := range tags {
 			b, _ := OpenAndReadFile(path.Clean(p) + "/.git/refs/tags/" + tag.Name())
+			log.Info("--------> ", tag.Name())
+			log.Info("found : ", string(b))
+			log.Info("ID : ", g.LastCommit.ID)
+			log.Info("Short : ", g.LastCommit.Short)
 			if string(b)[:9] == g.LastCommit.Short {
 				g.Tag = append(g.Tag, tag.Name())
 			}

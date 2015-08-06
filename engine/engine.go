@@ -2,6 +2,7 @@ package engine
 
 import (
 	"fmt"
+
 	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 )
 
@@ -49,7 +50,7 @@ func (e *Engine) Init(app *Application) error {
 	return nil
 }
 
-func (e *Engine) Build(push bool, cleanup bool) error {
+func (e *Engine) Build(push bool, cleanup bool, tag string) error {
 
 	if len(e.App.Builds) == 0 {
 		return fmt.Errorf("No build definition matches this branch in your smuggler file")
@@ -60,7 +61,7 @@ func (e *Engine) Build(push bool, cleanup bool) error {
 	}*/
 	// Match the build definition
 	// If multiple regexp matched, we're taking the first
-	env, err := e.App.InitBuild()
+	env, err := e.App.InitBuild(tag)
 	if err != nil {
 		log.Printf("%s", err)
 		return nil
@@ -93,7 +94,7 @@ func (e *Engine) Build(push bool, cleanup bool) error {
 	}
 
 	// Build and push
-	_, err = e.Docker.Build(push, cleanup)
+	_, err = e.Docker.Build(push, cleanup, tag)
 	if err != nil {
 		return err
 	}

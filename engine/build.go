@@ -346,6 +346,8 @@ func (b *Builder) MakeImage(dockerfile string, name ImageName, uptodate bool, no
 
 }
 
+// Push the docker images
+//
 func (b *Builder) PushImage(name ImageName) error {
 
 	auth := dockerclient.AuthConfiguration{}

@@ -4,10 +4,11 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
 	"path/filepath"
 	"strings"
+
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
 )
 
 type Docker struct {
@@ -60,10 +61,12 @@ func (d *Docker) InitBuilder() {
 	d.Builder = NewSimpleBuilder(d.Client)
 }
 
-func (d *Docker) Build(push bool, cleanup bool) (ImageName, error) {
+// Build docker image, and according the push flag, push image on repository.
+// If not empty, append the given tag to the image
+func (d *Docker) Build(push bool, cleanup bool, tag string) (ImageName, error) {
 
 	// Get the name for the image
-	image := GetNameFromApp(d.App, BUILD)
+	image := GetNameFromAppWithTag(d.App, tag, BUILD)
 
 	// Let's build the image
 	err := d.BuildDockerfile(image)

@@ -145,3 +145,16 @@ func GetNameFromApp(app *Application, mode int) ImageName {
 	i.Tags = append(i.Tags, "latest")
 	return i
 }
+
+// returns an image name, and append the specific tag (if not empty)
+func GetNameFromAppWithTag(app *Application, tag string, mode int) ImageName {
+
+	i := GetNameFromApp(app, mode)
+
+	// append the tag if not empty
+	if tag != "" {
+		i.Tags = append(i.Tags, tag)
+	}
+
+	return i
+}

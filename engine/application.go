@@ -2,15 +2,16 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
-	"github.com/jbdalido/smg/utils"
 	"math/rand"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 	"time"
+
+	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
+	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
+	"github.com/jbdalido/smg/utils"
 )
 
 type Application struct {
@@ -85,32 +86,34 @@ func (a *Application) Init() error {
 	return nil
 }
 
-func (a *Application) InitBuild() (string, error) {
+// initialize the build
+// if tag not empty, force the build to use the tag (will still seek through regexp)
+func (a *Application) InitBuild(tag string) (string, error) {
 
-	if a.Git != nil {
-		// First let's see if we've got a clean match
-		// against the branch
-		if _, ok := a.Builds[a.Git.Branch]; ok {
-			a.ActiveBuild = a.Builds[a.Git.Branch]
-			return a.Git.Branch, nil
+	// if a tag is given
+	if tag != "" {
+
+		if b, i := a.lookForBuild(tag, true); b != nil {
+			a.ActiveBuild = b
+			return i, nil
 		}
 
-		// If not let's go all regexp to find a match
-		for i, b := range a.Builds {
-			r, err := regexp.Compile(i)
-			if err == nil {
-				match := r.MatchString(a.Git.Branch)
-				if match {
-					a.ActiveBuild = b
-					return i, nil
-				}
-			}
+		// return an error, the specified tag doens't exist
+		return "", fmt.Errorf("Your smuggler definition file doesnt include a build action for tag %s", tag)
+	}
+
+	// let's try with git current branch
+	if a.Git != nil {
+		if b, i := a.lookForBuild(a.Git.Branch, true); b != nil {
+			a.ActiveBuild = b
+			return i, nil
 		}
 	}
 
-	if _, ok := a.Builds["default"]; ok {
-		a.ActiveBuild = a.Builds["default"]
-		return "default", nil
+	// search for the default
+	if b, i := a.lookForBuild("default", false); b != nil {
+		a.ActiveBuild = b
+		return i, nil
 	}
 
 	return "", fmt.Errorf("Your smuggler definition file doesnt include build action for this branch")
@@ -269,4 +272,32 @@ func (a *Application) GetSystemLimits(service string) (int, int) {
 		}
 	}
 	return cpu, ram
+}
+
+// look for a build
+// - first, see if we've got a clean match
+// - then, if the evaluateRegexp flag is true, try with action ids as regexp
+// return the found build, and the id
+func (a *Application) lookForBuild(name string, evaluateRegexp bool) (*Build, string) {
+
+	// First let's see if we've got a clean match
+	// against the branch
+	if v, ok := a.Builds[name]; ok {
+		return v, name
+	}
+
+	// If not let's go all regexp to find a match
+	if evaluateRegexp {
+		for i, b := range a.Builds {
+			r, err := regexp.Compile(i)
+			if err == nil {
+				match := r.MatchString(a.Git.Branch)
+				if match {
+					return b, i
+				}
+			}
+		}
+	}
+
+	return nil, ""
 }

@@ -47,6 +47,7 @@ Build command :
 	   --push, -p				Push images after a successful build
 	   --last, -l				Download last image for each build
 	   --delete, -D				Delete images created after a successful build
+       --tag, -t 			    Force both the action used for the build, and the image tag
 	   --etcd '--etcd option --etcd option'	ETCD Storage http endpoint
 
 

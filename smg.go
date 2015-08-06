@@ -2,12 +2,13 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+
 	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
 	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/codegangsta/cli"
 	"github.com/jbdalido/smg/engine"
 	"github.com/jbdalido/smg/utils"
-	"os"
-	"os/signal"
 )
 
 var (
@@ -66,6 +67,10 @@ func main() {
 		cli.BoolFlag{
 			Name:  "delete, D",
 			Usage: "Delete images created after a successful build",
+		},
+		cli.StringFlag{
+			Name:  "tag, t",
+			Usage: "Force both the action used for the build, and the image tag",
 		},
 	}
 
@@ -175,7 +180,7 @@ func CmdBuild(c *cli.Context) {
 		log.Fatalf("%s", err)
 	}
 	go func() {
-		endChannel <- eng.Build(c.Bool("push"), c.Bool("delete"))
+		endChannel <- eng.Build(c.Bool("push"), c.Bool("delete"), c.String("tag"))
 	}()
 	select {
 	case err := <-endChannel:
