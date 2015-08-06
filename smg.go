@@ -23,7 +23,7 @@ func main() {
 	cliApp := cli.App{
 		Name:    "smg",
 		Usage:   "Run and Build docker - https://smuggler.io",
-		Version: "0.5.1",
+		Version: "0.5.2",
 		Action:  cli.ShowAppHelp,
 		Writer:  os.Stdout,
 	}
