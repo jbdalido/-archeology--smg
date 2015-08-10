@@ -291,7 +291,7 @@ func (a *Application) lookForBuild(name string, evaluateRegexp bool) (*Build, st
 		for i, b := range a.Builds {
 			r, err := regexp.Compile(i)
 			if err == nil {
-				match := r.MatchString(a.Git.Branch)
+				match := r.MatchString(name)
 				if match {
 					return b, i
 				}
