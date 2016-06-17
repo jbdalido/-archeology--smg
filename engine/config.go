@@ -2,8 +2,8 @@ package engine
 
 import (
 	"fmt"
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/gopkg.in/yaml.v1"
+	log "github.com/Sirupsen/logrus"
+	"gopkg.in/yaml.v1"
 	"github.com/jbdalido/smg/utils"
 	"os"
 	"path"

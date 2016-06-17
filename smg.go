@@ -5,8 +5,8 @@ import (
 	"os"
 	"os/signal"
 
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/codegangsta/cli"
+	log "github.com/Sirupsen/logrus"
+	"github.com/codegangsta/cli"
 	"github.com/jbdalido/smg/engine"
 	"github.com/jbdalido/smg/utils"
 )
@@ -174,10 +174,11 @@ func Init(c *cli.Context) error {
 	return nil
 }
 
-func CmdBuild(c *cli.Context) {
+func CmdBuild(c *cli.Context) error {
 	err := Init(c)
 	if err != nil {
 		log.Fatalf("%s", err)
+		return err
 	}
 	go func() {
 		endChannel <- eng.Build(c.Bool("push"), c.Bool("delete"), c.String("tag"))
@@ -187,17 +188,21 @@ func CmdBuild(c *cli.Context) {
 		{
 			if err != nil {
 				log.Fatalf("%s", err)
+				return err
 			}
 		}
 	case <-killChannel:
 		eng.Stop()
 	}
+
+	return nil
 }
 
-func CmdRun(c *cli.Context) {
+func CmdRun(c *cli.Context) error {
 	err := Init(c)
 	if err != nil {
 		log.Fatalf("%s", err)
+		return err
 	}
 	go func() {
 		endChannel <- eng.Run(c.String("env"))
@@ -207,9 +212,11 @@ func CmdRun(c *cli.Context) {
 		{
 			if err != nil {
 				log.Fatalf("%s", err)
+				return err
 			}
 		}
 	case <-killChannel:
 		eng.Stop()
 	}
+	return nil
 }

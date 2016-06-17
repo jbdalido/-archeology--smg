@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"strings"
 
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	"github.com/jbdalido/smg/Godeps/_workspace/src/github.com/docker/docker/pkg/archive"
-	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/Sirupsen/logrus"
+	"github.com/docker/docker/pkg/archive"
+	dockerclient "github.com/fsouza/go-dockerclient"
 	"github.com/jbdalido/smg/utils"
 )
 
@@ -53,7 +53,7 @@ func NewBuilder(p string, client *dockerclient.Client) *Builder {
 
 	tmpPath := "/tmp/smg/build" + strconv.Itoa(rand.Intn(10000)+30000)
 
-	// Coy with tar stream
+	// Copy with tar stream
 	err = archive.CopyWithTar(path, tmpPath)
 	if err != nil {
 		log.Fatalf("%s", err)

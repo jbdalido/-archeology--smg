@@ -7,8 +7,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	log "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/Sirupsen/logrus"
-	dockerclient "github.com/jbdalido/smg/Godeps/_workspace/src/github.com/fsouza/go-dockerclient"
+	log "github.com/Sirupsen/logrus"
+	dockerclient "github.com/fsouza/go-dockerclient"
 )
 
 type Docker struct {
